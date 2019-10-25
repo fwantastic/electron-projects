@@ -1,21 +1,14 @@
 <template>
   <v-app>
-    <SidebarMenu/>
-
-    <v-app-bar app>
+    <v-app-bar app clipped-left>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <span>LETS-DO-IT</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        text
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
+      <span class="font-weight-light">A Simple TO DO App</span>
     </v-app-bar>
+
+    <SidebarMenu/>
 
     <v-content>
       <router-view/>
