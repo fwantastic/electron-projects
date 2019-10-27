@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" sm="8">
-        <v-list>
+        <v-list>    
           <v-subheader>TASKS</v-subheader>
 
           <v-list-item>
@@ -18,6 +18,7 @@
             v-for="task in tasks"
             :key="task.id"
             @click="selectTask(task)"
+            v-bind:class="{'blue lighten-5': selectedTask && selectedTask.id === task.id}"
           >
             <template>
               <v-list-item-action>
@@ -56,7 +57,7 @@
       </v-col>
 
       <v-col sm="4">
-        <TaskDetail v-if="this.selectedTask != null" v-bind:task=this.selectedTask />
+        <TaskDetail v-if="selectedTask" v-bind:task=selectedTask />
       </v-col>
     </v-row>
   </v-container>
