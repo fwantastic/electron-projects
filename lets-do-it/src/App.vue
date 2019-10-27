@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app clipped-left>
+    <v-app-bar app clipped-left color="blue" dark>
       <v-toolbar-title class="headline text-uppercase">
         <span>LETS-DO-IT</span>
       </v-toolbar-title>
