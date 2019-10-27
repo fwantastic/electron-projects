@@ -3,8 +3,9 @@
     <v-list>
       <v-list-item>
         <v-text-field
-          v-model="task.name"
+          v-model="newTaskName"
           label="Task"
+          @keydown.enter="updateTask"
         ></v-text-field>
       </v-list-item>
 
@@ -45,9 +46,10 @@
 
       <v-list-item>
         <v-textarea
-          v-model="task.description"
+          v-model="newDescription"
           outlined
           label="Description"
+          @keyup="updateTask"
         ></v-textarea>
       </v-list-item>
     </v-list>
@@ -59,10 +61,29 @@
     data () {
       return {
         displayDueDateDatePicker: false,
+        newTaskName: this.task.name,
+        newDescription: this.task.description,
       }
     },
     methods: {
+      updateTask () {
+        if (!this.newTaskName) {
+          console.log('Invalid task name');
+          this.newTaskName = this.task.name;
+          return;
+        }
+
+        this.task.name = this.newTaskName;
+        this.task.description = this.newDescription;
+      },
     },
     props: ['task'],
+    watch: {
+      task: function(newVal, oldVal) {
+        oldVal;
+        this.newTaskName = newVal.name;
+        this.newDescription = newVal.description;
+      }
+    }
   }
 </script>
