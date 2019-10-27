@@ -46,10 +46,10 @@
 
       <v-list-item>
         <v-textarea
-          v-model="newDescription"
+          v-model="newNotes"
           outlined
-          label="Description"
-          @keyup="updateTask"
+          label="Notes"
+          @keyup="throttledUpdateTask"
         ></v-textarea>
       </v-list-item>
     </v-list>
@@ -57,12 +57,14 @@
 </template>
 
 <script>
+  import _ from 'lodash'
+
   export default {
     data () {
       return {
         displayDueDateDatePicker: false,
         newTaskName: this.task.name,
-        newDescription: this.task.description,
+        newNotes: this.task.notes,
       }
     },
     methods: {
@@ -74,15 +76,18 @@
         }
 
         this.task.name = this.newTaskName;
-        this.task.description = this.newDescription;
+        this.task.notes = this.newNotes;
       },
+      throttledUpdateTask: 
+        _.debounce(function () { this.updateTask(); }, 500)
+      ,
     },
     props: ['task'],
     watch: {
       task: function(newVal, oldVal) {
         oldVal;
         this.newTaskName = newVal.name;
-        this.newDescription = newVal.description;
+        this.newNotes = newVal.notes;
       }
     }
   }

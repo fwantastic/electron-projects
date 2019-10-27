@@ -30,7 +30,7 @@
 
               <v-list-item-content>
                 <v-list-item-title v-text="task.name"></v-list-item-title>
-                <v-list-item-subtitle v-text="task.description"></v-list-item-subtitle>
+                <v-list-item-subtitle v-text="task.notes"></v-list-item-subtitle>
                 <v-list-item-subtitle v-text="task.group"></v-list-item-subtitle>
               </v-list-item-content>
 
@@ -81,7 +81,7 @@ export default {
           isCompleted: false,
           isImportant: true,
           dueDate: null,
-          description: 'Need to find a room to study',
+          notes: 'Need to find a room to study',
           group: 'Default',  
         },
         {
@@ -90,7 +90,7 @@ export default {
           isCompleted: false,
           isImportant: false,
           dueDate: null,
-          description: '',
+          notes: '',
           group: 'Default',  
         },
         {
@@ -99,7 +99,7 @@ export default {
           isCompleted: true,
           isImportant: false,
           dueDate: null,
-          description: '',
+          notes: '',
           group: 'Default',  
         }
       ],
@@ -121,7 +121,7 @@ export default {
         isCompleted: false,
         isImportant: false,
         dueDate: null,
-        description: '',
+        notes: '',
         group: 'Default',
       }
 
