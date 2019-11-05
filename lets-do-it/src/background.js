@@ -89,34 +89,10 @@ if (isDevelopment) {
   }
 }
 
-import Datastore from 'nedb'
+import Datastore from 'nedb-promises'
 import path from 'path'
 
-let db = new Datastore({
-  autoload: true,
-  filename: path.join(app.getPath('userData'), '/data.db')
-})
+let db = Datastore.create(path.join(app.getPath('userData'), '/data.db'));
 
 // make it global
 global.db = db;
-
-// test code
-// console.log('bg write');
-console.log(path.join(app.getPath('userData')));
-// var doc = { hello: 'world'
-//                , n: 5
-//                , today: new Date()
-//                , nedbIsAwesome: true
-//                , notthere: null
-//                , notToBeSaved: undefined  // Will not be saved
-//                , fruits: [ 'apple', 'orange', 'pear' ]
-//                , infos: { name: 'nedb' }
-//                };
-
-// db.insert(doc, function (err, newDoc) {   // Callback is optional
-//   // newDoc is the newly inserted document, including its _id
-//   // newDoc has no key called notToBeSaved since its value was undefined
-//   console.log('write: ' + JSON.stringify(err));
-//   console.log('write: ' + JSON.stringify(newDoc));
-// });
-

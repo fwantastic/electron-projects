@@ -16,7 +16,7 @@
 
           <v-list-item
             v-for="task in tasks"
-            :key="task.id"
+            :key="task._id"
             @click="selectTask(task)"
             v-bind:class="{'blue lighten-5': selectedTask && selectedTask.id === task.id}"
           >
@@ -72,43 +72,23 @@ export default {
     TaskDetail
   },
   data () {
+    this.findTasks();
     return {
       errors: [],
-      tasks: [
-        {
-          id: -1,
-          name: 'Study AWS',
-          isCompleted: false,
-          isImportant: true,
-          dueDate: null,
-          notes: 'Need to find a room to study',
-          group: 'Default',  
-        },
-        {
-          id: -2,
-          name: 'Buy laptop stand',
-          isCompleted: false,
-          isImportant: false,
-          dueDate: null,
-          notes: '',
-          group: 'Default',  
-        },
-        {
-          id: -3,
-          name: 'Exercise!',
-          isCompleted: true,
-          isImportant: false,
-          dueDate: null,
-          notes: '',
-          group: 'Default',  
-        }
-      ],
+      tasks: [],
       newTaskName: '',
       counter: 0,
       selectedTask: null,
     }
   },
   methods: {
+    findTasks() {
+      this.$db.find()
+      .then((result) => {
+          this.tasks = result;
+        }
+      );
+    },
     createTask () {
       if (!this.newTaskName) {
         this.errors.push('Invalid task name');
@@ -116,7 +96,6 @@ export default {
       }
 
       var newTask = {
-        id: this.counter++,
         name: this.newTaskName,
         isCompleted: false,
         isImportant: false,
@@ -125,8 +104,10 @@ export default {
         group: 'Default',
       }
 
-      this.tasks.push(newTask);
-      this.newTaskName = '';
+      this.$db.insert(newTask)
+      .then(() => { this.newTaskName = ''; })
+      .then(() => { this.findTasks(); })
+      ;   
     },
     selectTask(task) {
       this.selectedTask = task;
