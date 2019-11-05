@@ -18,7 +18,7 @@
             v-for="task in tasks"
             :key="task._id"
             @click="selectTask(task)"
-            v-bind:class="{'blue lighten-5': selectedTask && selectedTask.id === task.id}"
+            v-bind:class="{'blue lighten-5': selectedTask && selectedTask._id === task._id}"
           >
             <template>
               <v-list-item-action>
