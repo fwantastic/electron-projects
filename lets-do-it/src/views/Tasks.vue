@@ -35,7 +35,7 @@
               </v-list-item-content>
 
               <v-list-item-action
-                @click="task.isImportant = !task.isImportant"
+                @click="toggleIsImportant(task)"
               >
                 <v-icon
                   v-if="task.isImportant"
@@ -72,7 +72,6 @@ export default {
     TaskDetail
   },
   data () {
-    this.findTasks();
     return {
       errors: [],
       tasks: [],
@@ -81,13 +80,25 @@ export default {
       selectedTask: null,
     }
   },
+  created: function () {
+    this.findTasks();
+  },
+  computed: {
+    // this function copies selectedTask object to allow watcher
+    // to see the old and new values with deep copy
+    computedSelectedTask: function () {
+      return Object.assign({}, this.selectedTask);
+    }
+  },
   methods: {
     findTasks() {
       this.$db.find()
-      .then((result) => {
-          this.tasks = result;
-        }
-      );
+        .then((result) => {
+            // this is required to remove the cursor
+            // if we return result directly then we can't modify it for some reason
+            this.tasks = JSON.parse(JSON.stringify(result));
+          }
+        );
     },
     createTask () {
       if (!this.newTaskName) {
@@ -105,13 +116,30 @@ export default {
       }
 
       this.$db.insert(newTask)
-      .then(() => { this.newTaskName = ''; })
-      .then(() => { this.findTasks(); })
+        .then(() => { this.newTaskName = ''; })
+        .then(this.findTasks())
       ;   
     },
     selectTask(task) {
       this.selectedTask = task;
+    },
+    toggleIsImportant(task) {
+      task.isImportant = !task.isImportant;
+    },
+  },
+  watch: {
+      computedSelectedTask: {
+        handler: function(newTask, oldTask) {
+          // console.log('oldTask: ' + JSON.stringify(oldTask));
+          // console.log('newTask: ' + JSON.stringify(newTask));
+          oldTask;
+          this.$db.update(
+            { _id: newTask._id },
+            newTask
+          );
+        },
+        deep: true
+      },
     }
-  }
 };
 </script>

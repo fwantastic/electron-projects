@@ -81,12 +81,5 @@
       ,
     },
     props: ['task'],
-    watch: {
-      task: function(newVal, oldVal) {
-        oldVal;
-        this.newTaskName = newVal.name;
-        this.newNotes = newVal.notes;
-      }
-    }
   }
 </script>
