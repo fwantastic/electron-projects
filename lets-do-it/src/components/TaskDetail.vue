@@ -69,7 +69,6 @@
       updateTask () {
         if (!this.newTaskName) {
           console.log('Invalid task name');
-          this.newTaskName = this.task.name;
           return;
         }
 
@@ -81,5 +80,12 @@
       ,
     },
     props: ['task'],
+    watch: {
+      task: function(newVal, oldVal) {
+        oldVal;
+        this.newTaskName = newVal.name;
+        this.newNotes = newVal.notes;
+      }
+    }
   }
 </script>
