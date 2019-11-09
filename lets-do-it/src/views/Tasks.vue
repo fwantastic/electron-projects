@@ -3,7 +3,34 @@
     <v-row>
       <v-col cols="12" sm="8">
         <v-list>    
-          <v-subheader>TASKS</v-subheader>
+          <v-subheader>TASKS
+
+            <v-row justify="center" cols="12">
+              <v-col
+                cols="6"
+                md="4"
+              >
+                <v-select
+                  :items="sortOptions"
+                  label="Sort By"
+                  v-model="selectedSortOption"
+                  @change="findTasks()"
+                ></v-select>
+              </v-col>
+
+              <v-col
+                cols="6"
+                md="4"
+              >
+                <v-select
+                  :items="sortOrderOptions"
+                  label="Sort Order"
+                  v-model="selectedSortOrderOption"
+                  @change="findTasks()"
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-subheader>
 
           <v-list-item>
             <v-text-field
@@ -79,6 +106,10 @@ export default {
       newTaskName: '',
       counter: 0,
       selectedTask: null,
+      sortOptions: ['Importance', 'Due Date', 'Completed', 'Alphabetically', 'Creation Date'],
+      selectedSortOption: 'Creation Date',
+      sortOrderOptions: ['Ascending', 'Descending'],
+      selectedSortOrderOption: 'Descending',
     }
   },
   created: function () {
@@ -87,7 +118,7 @@ export default {
   computed: {
     // this function copies selectedTask object to allow watcher
     // to see the old and new values with deep copy
-    computedSelectedTask: function () {
+    computedSelectedTask: function () { 
       return Object.assign({}, this.selectedTask);
     }
   },
@@ -99,13 +130,61 @@ export default {
             // if we return result directly then we can't modify it for some reason
             this.tasks = JSON.parse(JSON.stringify(result));
 
-            if (this.filterOption === 'important') {
-              this.tasks = this.tasks.filter(task => task.isImportant);
-            } else if (this.filterOption === 'planned') {
-              this.tasks = this.tasks.filter(task => task.dueDate);
-            }
+            this.filterTasks();
+            this.sortTasks();
           }
         );
+    },
+    filterTasks() {
+      if (this.filterOption === 'important') {
+        this.tasks = this.tasks.filter(task => task.isImportant);
+      } else if (this.filterOption === 'planned') {
+        this.tasks = this.tasks.filter(task => task.dueDate);
+      }
+    },
+    sortTasks() {
+      if (this.selectedSortOption === 'Importance') {
+        this.tasks = this.tasks.sort((a, b) => this.sort(a.isImportant, b.isImportant));
+      } else if (this.selectedSortOption === 'Due Date') {
+        this.tasks = this.tasks.sort((a, b) => this.sort(a.dueDate, b.dueDate));
+      } else if (this.selectedSortOption === 'Completed') {
+        this.tasks = this.tasks.sort((a, b) => this.sort(a.isCompleted, b.isCompleted));
+      } else if (this.selectedSortOption === 'Alphabetically') {
+        this.tasks = this.tasks.sort((a, b) => this.sort(a.name, b.name));
+      } else if (this.selectedSortOption === 'Creation Date') {
+        this.tasks = this.tasks.sort((a, b) => this.sort(a.createdDate, b.createdDate));
+      }
+    },
+    sort(a, b) {
+      if (this.selectedSortOrderOption === 'Ascending') {
+        return this.sortAscending(a, b);
+      }
+
+      return this.sortDescending(a, b);
+    },
+    sortAscending(a, b) {
+      if (!a) {
+        return 1;
+      } else if (!b) {
+        return -1;
+      } else if (a < b) {
+        return -1;
+      } else if (a > b) {
+        return 1;
+      }
+      return 0;
+    },
+    sortDescending(a, b) {
+      if (!a) {
+        return 1;
+      } else if (!b) {
+        return -1;
+      } else if (a > b) {
+        return -1;
+      } else if (a < b) {
+        return 1;
+      }
+      return 0;
     },
     createTask () {
       if (!this.newTaskName) {
@@ -120,6 +199,7 @@ export default {
         dueDate: null,
         notes: '',
         group: 'Default',
+        createdDate: new Date(),
       }
 
       this.$db.insert(newTask)
