@@ -5,7 +5,8 @@
     <SidebarMenu/>
 
     <v-content>
-      <router-view/>
+      <!-- set unique key to use different routes for the same page -->
+      <router-view :key="$route.path"/>
     </v-content>
   </v-app>
 </template>

@@ -22,7 +22,20 @@ const routes = [
   {
     path: '/tasks',
     name: 'Tasks',
-    component: Tasks
+    component: Tasks,
+    props: { filterOption: '' }
+  },
+  {
+    path: '/important',
+    name: 'Important',
+    component: Tasks,
+    props: { filterOption: 'important' }
+  },
+  {
+    path: '/planned',
+    name: 'Planned',
+    component: Tasks,
+    props: { filterOption: 'planned' }
   },
 ]
 

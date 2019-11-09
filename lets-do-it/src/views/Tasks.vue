@@ -71,6 +71,7 @@ export default {
   components: {
     TaskDetail
   },
+  props: ['filterOption'],
   data () {
     return {
       errors: [],
@@ -97,6 +98,12 @@ export default {
             // this is required to remove the cursor
             // if we return result directly then we can't modify it for some reason
             this.tasks = JSON.parse(JSON.stringify(result));
+
+            if (this.filterOption === 'important') {
+              this.tasks = this.tasks.filter(task => task.isImportant);
+            } else if (this.filterOption === 'planned') {
+              this.tasks = this.tasks.filter(task => task.dueDate);
+            }
           }
         );
     },
