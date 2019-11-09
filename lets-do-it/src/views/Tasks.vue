@@ -6,8 +6,9 @@
           <v-subheader>TASKS
 
             <v-row justify="center" cols="12">
+              <v-col cols="4" />
               <v-col
-                cols="6"
+                cols="4"
                 md="4"
               >
                 <v-select
@@ -19,7 +20,7 @@
               </v-col>
 
               <v-col
-                cols="6"
+                cols="4"
                 md="4"
               >
                 <v-select
