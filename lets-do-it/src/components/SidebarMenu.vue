@@ -32,9 +32,9 @@
       return {
         items: [
           { title: 'Dashboard', icon: 'mdi-view-dashboard' },
-          { title: 'Tasks', icon: 'mdi-image' },
-          { title: 'Important', icon: 'mdi-image' },
-          { title: 'Planned', icon: 'mdi-image' },
+          { title: 'Tasks', icon: 'mdi-card-text-outline' },
+          { title: 'Important', icon: 'mdi-message-alert' },
+          { title: 'Planned', icon: 'mdi-timer' },
           { title: 'About', icon: 'mdi-help-box' },
         ],
         right: null,
