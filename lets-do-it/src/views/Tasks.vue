@@ -151,7 +151,7 @@ export default {
       } else if (this.selectedSortOption === 'Completed') {
         this.tasks = this.tasks.sort((a, b) => this.sort(a.isCompleted, b.isCompleted));
       } else if (this.selectedSortOption === 'Alphabetically') {
-        this.tasks = this.tasks.sort((a, b) => this.sort(a.name, b.name));
+        this.tasks = this.tasks.sort((a, b) => this.sort(a.name.toLowerCase(), b.name.toLowerCase()));
       } else if (this.selectedSortOption === 'Creation Date') {
         this.tasks = this.tasks.sort((a, b) => this.sort(a.createdDate, b.createdDate));
       }
@@ -164,9 +164,9 @@ export default {
       return this.sortDescending(a, b);
     },
     sortAscending(a, b) {
-      if (!a) {
+      if (a === null) {
         return 1;
-      } else if (!b) {
+      } else if (b === null) {
         return -1;
       } else if (a < b) {
         return -1;
@@ -176,9 +176,9 @@ export default {
       return 0;
     },
     sortDescending(a, b) {
-      if (!a) {
+      if (a === null) {
         return 1;
-      } else if (!b) {
+      } else if (b === null) {
         return -1;
       } else if (a > b) {
         return -1;
