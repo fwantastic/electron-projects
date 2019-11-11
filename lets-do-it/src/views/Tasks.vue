@@ -47,6 +47,7 @@
             :key="task._id"
             @click="selectTask(task)"
             v-bind:class="{'blue lighten-5': selectedTask && selectedTask._id === task._id}"
+            @contextmenu="showRightClickOptions($event, task)"
           >
             <template>
               <v-list-item-action>
@@ -59,6 +60,7 @@
               <v-list-item-content>
                 <v-list-item-title v-text="task.name"></v-list-item-title>
                 <v-list-item-subtitle v-text="task.notes"></v-list-item-subtitle>
+                <v-list-item-subtitle v-if="task.dueDate" v-text="'Due ' + task.dueDate"></v-list-item-subtitle>
                 <v-list-item-subtitle v-text="task.group"></v-list-item-subtitle>
               </v-list-item-content>
 
@@ -88,8 +90,27 @@
         <TaskDetail v-if="selectedTask" v-bind:task=selectedTask />
       </v-col>
     </v-row>
-  </v-container>
 
+    <v-menu
+      v-model="isShowRightClickOptions"
+      :position-x="x"
+      :position-y="y"
+      absolute
+      offset-y
+    >
+      <v-list>
+        <v-list-item 
+          v-for="rightClickOption in rightClickOptions" 
+          :key="rightClickOption"
+          @click="rightClick(rightClickOption)"
+        >
+          <v-list-item-content>
+            <v-list-item-title v-text="rightClickOption"></v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+  </v-container>
 </template>
 
 <script>
@@ -111,6 +132,10 @@ export default {
       selectedSortOption: 'Creation Date',
       sortOrderOptions: ['Ascending', 'Descending'],
       selectedSortOrderOption: 'Descending',
+      isShowRightClickOptions: false,
+      x: 0,
+      y: 0,
+      rightClickOptions: ['Delete'],
     }
   },
   created: function () {
@@ -124,6 +149,21 @@ export default {
     }
   },
   methods: {
+    rightClick(rightClickOption){
+      if (rightClickOption === 'Delete') {
+        this.deleteTask(this.selectedTask);
+      }
+    },
+    showRightClickOptions(e, task) {
+      e.preventDefault();
+      this.selectTask(task);
+      this.isShowRightClickOptions = false;
+      this.x = e.clientX;
+      this.y = e.clientY;
+      this.$nextTick(() => {
+        this.isShowRightClickOptions = true;
+      });
+    },
     findTasks() {
       this.$db.find()
         .then((result) => {
@@ -210,6 +250,13 @@ export default {
     },
     selectTask(task) {
       this.selectedTask = task;
+    },
+    deleteTask(task) {
+      this.$db.remove({ _id: task._id }, {}, function (err, numRemoved) {
+        console.log('numRemoved: ' + numRemoved);
+      });
+      this.selectedTask = null;
+      this.findTasks();
     },
     toggleIsImportant(task) {
       task.isImportant = !task.isImportant;
