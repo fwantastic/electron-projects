@@ -243,6 +243,12 @@ export default {
         createdDate: new Date(),
       }
 
+      if (this.filterOption === 'important') {
+        newTask.isImportant = true;
+      } else if (this.filterOption === 'planned') {
+        newTask.dueDate = new Date();
+      }
+
       this.$db.insert(newTask)
         .then(() => { this.newTaskName = ''; })
         .then(this.findTasks())
