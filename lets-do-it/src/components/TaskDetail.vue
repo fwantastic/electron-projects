@@ -51,11 +51,16 @@
         @keyup="throttledUpdateTask"
       ></v-textarea>
     </v-list-item>
+
+    <v-list-item>
+      <span style="color:grey">Created on {{ formatDate(task.createdDate) }}</span>
+    </v-list-item>
   </v-list>
 </template>
 
 <script>
   import _ from 'lodash'
+  import moment from 'moment'
 
   export default {
     data () {
@@ -66,7 +71,7 @@
       }
     },
     methods: {
-      updateTask () {
+      updateTask() {
         if (!this.newTaskName) {
           console.log('Invalid task name');
           return;
@@ -78,6 +83,9 @@
       throttledUpdateTask: 
         _.debounce(function () { this.updateTask(); }, 500)
       ,
+      formatDate(date) {
+        return moment(date).format('MM-DD-YYYY HH:mm:ss A');
+      }
     },
     props: ['task'],
     watch: {
