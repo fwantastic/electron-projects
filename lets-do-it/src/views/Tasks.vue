@@ -58,10 +58,12 @@
               </v-list-item-action>
 
               <v-list-item-content>
-                <v-list-item-title v-text="task.name"></v-list-item-title>
-                <v-list-item-subtitle v-text="task.notes"></v-list-item-subtitle>
-                <v-list-item-subtitle v-if="task.dueDate" v-text="'Due ' + task.dueDate"></v-list-item-subtitle>
-                <v-list-item-subtitle v-text="task.group"></v-list-item-subtitle>
+                <drag :transfer-data="task">
+                  <v-list-item-title v-text="task.name"></v-list-item-title>
+                  <v-list-item-subtitle v-text="task.notes"></v-list-item-subtitle>
+                  <v-list-item-subtitle v-if="task.dueDate" v-text="'Due ' + task.dueDate"></v-list-item-subtitle>
+                  <v-list-item-subtitle v-text="task.group"></v-list-item-subtitle>
+                </drag>
               </v-list-item-content>
 
               <v-list-item-action
@@ -115,10 +117,13 @@
 
 <script>
 import TaskDetail from '@/components/TaskDetail';
+import { EventBus } from '@/utils/event-bus.js';
+import { Drag } from 'vue-drag-drop';
 
 export default {
   components: {
-    TaskDetail
+    TaskDetail,
+    Drag,
   },
   props: ['filterOption'],
   data () {
@@ -140,6 +145,13 @@ export default {
   },
   created: function () {
     this.findTasks();
+
+    // Listen for updateTask event and its payload.
+    EventBus.$on('updateTask', task => {
+      console.log('event bus updateTask');
+      console.log(JSON.parse(JSON.stringify(task)));
+      this.updateTask(task);
+    });
   },
   computed: {
     // this function copies selectedTask object to allow watcher
@@ -239,7 +251,7 @@ export default {
         isImportant: false,
         dueDate: null,
         notes: '',
-        group: 'Default',
+        list: '',
         createdDate: new Date(),
       }
 
@@ -257,10 +269,15 @@ export default {
     selectTask(task) {
       this.selectedTask = task;
     },
+    updateTask(task) {
+      this.$db.update(
+            { _id: task._id },
+            task
+          );
+      this.findTasks();
+    },
     deleteTask(task) {
-      this.$db.remove({ _id: task._id }, {}, function (err, numRemoved) {
-        console.log('numRemoved: ' + numRemoved);
-      });
+      this.$db.remove({ _id: task._id }, {}, {});
       this.selectedTask = null;
       this.findTasks();
     },

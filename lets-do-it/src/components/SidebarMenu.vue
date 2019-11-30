@@ -22,12 +22,22 @@
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+
+      <v-divider></v-divider>
+
+      <TaskLists />
+
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
+  import TaskLists from '@/components/TaskLists';
+
   export default {
+    components: {
+      TaskLists,
+    },
     data () {
       return {
         items: [
@@ -44,7 +54,7 @@
       dispatch (selectedItem) {
         var title = selectedItem.title;
         this.$router.push({name: title}).catch(err => err);
-      }
-    }
+      },
+    },
   }
 </script>
