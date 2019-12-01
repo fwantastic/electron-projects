@@ -6,7 +6,7 @@
 
     <v-content>
       <!-- set unique key to use different routes for the same page -->
-      <router-view :key="$route.path" />
+      <router-view :key="$route.fullPath" />
     </v-content>
   </v-app>
 </template>

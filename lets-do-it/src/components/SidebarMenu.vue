@@ -23,6 +23,9 @@
         </v-list-item-content>
       </v-list-item>
 
+      <v-list-item>
+      </v-list-item>
+
       <v-divider></v-divider>
 
       <TaskLists />
@@ -47,13 +50,12 @@
           { title: 'Planned', icon: 'mdi-timer' },
           { title: 'About', icon: 'mdi-help-box' },
         ],
-        right: null,
       }
     },
     methods: {
       dispatch (selectedItem) {
         var title = selectedItem.title;
-        this.$router.push({name: title}).catch(err => err);
+        this.$router.push({name: title}).catch(err => console.log('Error dispatching: ' + err));
       },
     },
   }

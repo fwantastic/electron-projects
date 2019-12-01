@@ -189,11 +189,16 @@ export default {
         );
     },
     filterTasks() {
-      if (this.filterOption === 'important') {
+      if (this.filterOption.type === 'important') {
         this.tasks = this.tasks.filter(task => task.isImportant);
-      } else if (this.filterOption === 'planned') {
+      } else if (this.filterOption.type === 'planned') {
         this.tasks = this.tasks.filter(task => task.dueDate);
+      } else if (this.filterOption.type === 'taskList') {
+        this.tasks = this.tasks.filter(task => task.list === this.filterOption.taskListName);
       }
+      console.log('this.filterOption: ');
+      console.log(JSON.parse(JSON.stringify(this.filterOption)));
+      // console.log(this.$route.query);
     },
     sortTasks() {
       if (this.selectedSortOption === 'Importance') {

@@ -1,17 +1,17 @@
 <template>
   <v-list>
-    <v-list-item>
-      <v-text-field
-        v-model="newListName"
-        label="Add a List !"
-        outlined
-        @keydown.enter="createList"
-      ></v-text-field>
-    </v-list-item>
+    <v-text-field
+      v-model="newListName"
+      label="Add a List !"
+      outlined
+      dense
+      @keydown.enter="createList"
+    ></v-text-field>
 
     <v-list-item
       v-for="taskList in taskLists"
       :key="taskList.name"
+      @click="dispatch(taskList.name)"
     >
       <div>
         <drop @drop="handleDrop(taskList.name, ...arguments)">{{ taskList.name }}</drop>
@@ -40,6 +40,10 @@
       }
     },
     methods: {
+      dispatch (selectedTaskList) {
+        console.log('dispatch: ' + selectedTaskList);
+        this.$router.push({name: 'TaskList', query: { taskListName: selectedTaskList }}).catch(err => console.log('Error dispatching: ' + err));
+      },
       handleDrop(list, task) {
         // console.log('data: ' + JSON.stringify(task));
         // console.log('group: ' + JSON.stringify(group));

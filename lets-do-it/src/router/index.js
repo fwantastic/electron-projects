@@ -23,19 +23,26 @@ const routes = [
     path: '/tasks',
     name: 'Tasks',
     component: Tasks,
-    props: { filterOption: '' }
+    props: { filterOption: { type: '' } }
   },
   {
     path: '/important',
     name: 'Important',
     component: Tasks,
-    props: { filterOption: 'important' }
+    props: { filterOption: { type: 'important' } }
   },
   {
     path: '/planned',
     name: 'Planned',
     component: Tasks,
-    props: { filterOption: 'planned' }
+    props: { filterOption: { type: 'planned' } }
+  },
+  {
+    path: '/tasklist',
+    name: 'TaskList',
+    component: Tasks,
+    // maps query params as props
+    props: (route) => ({ filterOption: { type: 'taskList', taskListName: route.query.taskListName } })
   },
 ]
 
